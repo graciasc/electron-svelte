@@ -3,9 +3,10 @@
 </script>
 
 <style>
-	h1 {
-		color: purple;
+	div {
+		@apply bg-gray-500;
+		@apply flex-1;
 	}
 </style>
 
-<h1>Hello {name}!</h1>
+<div>Hello World!</div>
