@@ -19,6 +19,6 @@
     "clean": "rm -rf dist",
     "start:electron": "electron .",
     "start:watch": "rollup -c -w",
-    "start": "run-p clean start:watch start:electron"
+    "start": "run-p start:watch start:electron"
   }
 }
