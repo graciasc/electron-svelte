@@ -15,8 +15,9 @@
     "svelte": "^3.4.2"
   },
   "scripts": {
-    "start": "electron .",
-    "build": "rollup -c",
-    "build:watch": "rollup -c -w"
+    "start:watch": "rollup -c -w",
+    "start:electron": "electron .",
+    "start": "run-p start:watch start:electron",
+    "build": "rollup -c"
   }
 }

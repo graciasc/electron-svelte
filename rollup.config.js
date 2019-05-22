@@ -51,6 +51,6 @@ export default {
 		})
 	],
 	watch: {
-		clearScreen: false
+		clearScreen: true
 	}
 };
