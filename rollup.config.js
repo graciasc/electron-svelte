@@ -3,17 +3,38 @@ import resolve from 'rollup-plugin-node-resolve';
 import copy from 'rollup-plugin-copy';
 import postcss from 'postcss'
 import tailwind from 'tailwindcss'
-// import commonjs from 'rollup-plugin-commonjs';
-// import livereload from 'rollup-plugin-livereload';
-// import { terser } from 'rollup-plugin-terser';
+import postcss_plugin from 'rollup-plugin-postcss';
+import { terser } from 'rollup-plugin-terser';
+import cssnano from 'cssnano'
+import purgecss from '@fullhuman/postcss-purgecss';
 
 const production = !process.env.ROLLUP_WATCH;
 
+const postcss_plugins = [
+	tailwind(),
+]
+
+if (production) {
+	postcss_plugins.push(...[
+		purgecss({
+			// Specify the paths to all of the template files in your project
+			content: [
+				'./src/**/*.html',
+				'./src/**/*.svelte',
+			],
+			// Include any special characters you're using in this regular expression
+			defaultExtractor: content => content.match(/[A-Za-z0-9-_:/]+/g) || []
+		}),
+		cssnano({
+			preset: 'default',
+		})
+	])
+}
+
 export default {
-	input: ['src/index.js', 'src/app.js'],
+	input: 'src/index.js',
 	output: {
 		sourcemap: true,
-		// format: 'iife',
 		format: 'cjs',
 		name: 'app',
 		dir: 'dist/'
@@ -36,6 +57,10 @@ export default {
 				css.write('dist/app.css');
 			}
 		}),
+		postcss_plugin({
+			extract: true,
+      plugins: postcss_plugins
+    }),
 
 		// If you have external dependencies installed from
 		// npm, you'll most likely need these plugins. In
@@ -51,13 +76,13 @@ export default {
 
 		// If we're building for production (npm run build
 		// instead of npm run dev), minify
-		// production && terser()
+		production && terser(),
 
 		copy({
 			targets: [
-        'src/index.html'
-      ],
-      outputFolder: 'dist'
+				{src: 'src/index.html', dest: 'dist'}
+			],
+			copyOnce: !production
 		})
 	],
 	watch: {

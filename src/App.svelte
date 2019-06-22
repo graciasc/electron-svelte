@@ -9,4 +9,4 @@
 	}
 </style>
 
-<div>Hello World!</div>
+<div>Hello {name}!</div>
